@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard 2</title>
+
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+  <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../plugins/toastr/toastr.min.css">
+
+  <style>
+  </style>
+
+</head>
+
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
+  <div class="wrapper">
+
+    <div class="preloader flex-column justify-content-center align-items-center">
+      <img class="animation__wobble" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+    </div>
+
+    <div th:insert="~{components/menu :: header}"></div>
+
+
+
+
+    <div class="content-wrapper">
+
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Dashboard v2</h1>
+            </div>
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Dashboard v2</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Presença -->
+      <div class="card">
+        <div class="card-header border-transparent">
+          <h3 class="card-title" th:text="'Presença de ' + ${usuario.nome}"></h3>
+          <div class="card-tools">
+          </div>
+        </div>
+
+        <div class="card-footer clearfix">
+          <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+        </div>
+
+        <div class="card collapsed-card" th:each="ano : ${anospagamento}">
+          <div class="card-header border-transparent">
+            <h3 class="card-title" th:text="${ano}"></h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            
+            
+            <div class="row">
+              <section class="col-sm-3" th:each="mes : ${enummeses}">
+
+                <div class="col-ld-12 mb-3">
+                  <div class="border p-3 badge badge-success" th:text="${mes.name()}"></div>
+
+                  <div class="table-responsive">
+                    <table class="table m-0">
+                      <thead>
+                        <tr>
+                          <th>Data</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each="presenca : ${presencas}">
+                          <td th:if="${presenca.mes} == ${mes.getNumero()} and ${presenca.ano} == ${ano}"><a href="pages/examples/invoice.html"
+                              th:text="${presenca.presenca}"></a><i th:if="${presenca.observacao} != null"  class="fas fa-comment text-success" style="margin-left: 15px;"></i></td>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </section>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Pagamento -->
+      <div class="card">
+        <div class="card-header border-transparent">
+          <h3 class="card-title" th:text="'Pagamento de ' + ${usuario.nome}"></h3>
+          <div class="card-tools">
+          </div>
+        </div>
+
+        <div class="card-footer clearfix">
+          <a href="javascript:void(0)" class="btn btn-sm btn-info float-left">Place New Order</a>
+        </div>
+
+        <div class="card collapsed-card" th:each="ano : ${anospagamento}">
+          <div class="card-header border-transparent">
+            <h3 class="card-title" th:text="${ano}"></h3>
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table m-0">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                    <th>Forma de pagamento</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="pagamento : ${pagamentos}">
+                    <td th:if="${pagamento.ano} == ${ano}"><a href="pages/examples/invoice.html"
+                        th:text="${pagamento.id}"></a></td>
+                    <td th:if="${pagamento.ano} == ${ano}"><span th:text="${pagamento.dataPagamento}"></span></td>
+                    <td th:if="${pagamento.ano} == ${ano}"><span th:text="${pagamento.Valor}"></span></td>
+                    <td th:if="${pagamento.ano} == ${ano}"><span th:text="${pagamento.formaPagamento}"></span></td>
+                    <td th:if="${pagamento.ano} == ${ano}"><i th:if="${pagamento.temAnexo} == true" class="fas fa-paperclip text-warning"></i></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <aside class="control-sidebar control-sidebar-dark">
+
+  </aside>
+
+  <div th:insert="~{components/footer :: footer}"></div>
+  </div>
+
+
+  <script src="../plugins/jquery/jquery.min.js"></script>
+  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../dist/js/adminlte.min.js"></script>
+  <script src="../plugins/toastr/toastr.min.js"></script>
+  <script src="../plugins/moment/moment.min.js"></script>
+  <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
+  <script src="../plugins/select2/js/select2.full.min.js"></script>
+
+  <script th:inline="javascript">
+
+    $(document).ready(() => {
+      $('.select2').select2()
+
+      $('.select2bs4').select2({
+        theme: 'bootstrap4'
+      })
+    })
+
+    function adicionaExemplo() {
+      console.log("Adicionado!");
+      escondeModalExemplo();
+    }
+
+    function limpaExemploModal() {
+      document.getElementById("exemploobs").value = "";
+    }
+
+    function mostraModalExemplo() {
+      $("#modal-adiciona-exemplo").modal("show");
+    }
+
+    function escondeModalExemplo() {
+      limpaExemploModal();
+      $("#modal-adiciona-exemplo").modal("hide");
+    }
+
+    function redireciona(url) {
+      window.location.href = url;
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>VFC | Principal</title>
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="../plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <style>
+        .card {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .datepicker table tr td span.focused, .datepicker table tr td span:hover {
+            background: #74727286;
+        }
+
+        .datepicker .datepicker-switch:hover, .datepicker .next:hover, .datepicker .prev:hover, .datepicker tfoot tr th:hover {
+            background: #74727286;
+        }
+
+        .datepicker table tr td.day.focused,
+        .datepicker table tr td.day:hover {
+            background: #74727286;
+            cursor: pointer;
+        }
+        /* 
+        .dark-mode .dropdown-menu {
+            background-color: #343a40;
+            color: #414141;
+        } */
+    </style>
+
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed dark-mode">
+    <div class="wrapper">
+
+        <div class="sticky-top" th:insert="~{components/menu :: header}"></div>
+
+        <div class="content-wrapper">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h1>Exemplo - Listar</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/home">Exemplo</a></li>
+                                <li class="breadcrumb-item active">Listar</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="content">
+                <!-- Presença -->
+                <div class="card">
+                    <div class="card-header border-transparent">
+                        <h3 class="card-title" th:text="Presença"></h3>
+                        <div class="card-tools">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header border-transparent d-flex justify-content-between align-items-center">
+                            <h3 class="card-title badge badge-secondary"
+                                th:text="${usuario.nome} + ' ' + ${usuario.sobrenome}"></h3>
+                            <button class="btn btn-success btn-tool ml-auto" onclick="mostraModalExemplo();">Nova
+                                Presença</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="card collapsed-card bg bg-olive" th:each="ano : ${anos}">
+                                <div class="card-header border-transparent bg bg-olive">
+                                    <h3 class="card-title">
+                                        <span th:each="listaAno : ${listaAnos}" th:if="${ano == listaAno.ano}">
+                                            <span th:text="${ano} + ' Presente em ' + ${listaAno.conta}"></span>
+                                        </span>
+                                        <span th:each="contaAno : ${listaContagemAnos}"
+                                            th:if="${ano == contaAno.anoReferencia}">
+                                            <span th:text="'/ ' + ${contaAno.contagem}"></span>
+                                        </span>
+                                    </h3>
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <section class="col-sm-12">
+                                        <div class="card p-0 collapsed-card" th:each="mes : ${enummeses}">
+                                            <div class="card-header border-transparent bg bg-secundary">
+                                                <h5 class="card-title text-dark">
+                                                    <span th:each="listaMes : ${listaAnosMeses}"
+                                                        th:if="${mes.getNumero() == listaMes.mes && ano == listaMes.ano}">
+                                                        <span
+                                                            th:text="${mes.name} + ' Presente em ' + ${listaMes.conta}"></span>
+                                                    </span>
+                                                    <span th:each="contaMes : ${listaContagemMeses}"
+                                                        th:if="${mes.getNumero() == contaMes.mesReferencia && ano == contaMes.anoReferencia}">
+                                                        <span th:text="'/ ' + ${contaMes.contagem}"></span>
+                                                    </span>
+                                                </h5>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool"
+                                                        data-card-widget="collapse">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <div class="row p-3">
+                                                    <div class="col-12">
+                                                        <table id="tabela-presenca"
+                                                            class="table table-bordered table-striped">
+                                                            <Thead>
+                                                                <tr>
+                                                                    <th class="text-dark" style="width: 5%;">Data </th>
+                                                                    <th class="text-dark">Observação</th>
+                                                                </tr>
+                                                            </Thead>
+                                                            <tbody>
+                                                                <tr th:each="presenca : ${presencas}">
+                                                                    <td class="text-dark"
+                                                                        th:if="${presenca.ano == ano && presenca.mes == mes.getNumero()}"
+                                                                        th:text="${#dates.format(presenca.presenca, 'dd/MM/yyyy')}">
+                                                                    </td>
+                                                                    <td class="text-dark"
+                                                                        th:if="${presenca.ano == ano && presenca.mes == mes.getNumero()}"
+                                                                        th:text="${presenca.observacao}"></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="modal fade" id="modal-adiciona-exemplo" tabindex="-1" role="dialog" data-backdrop="static"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Adicione um exemplo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="exemploobs">Observações</label>
+                                    <textarea maxlength="255" id="exemploobs" name="exemploobs"
+                                        class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <label for="date">Escolha uma data</label>
+                            <input type="text" class="form-control datepicker text-dark" id="date"
+                                placeholder="Clique para selecionar uma data">
+                            <!-- <div class="input-group date" data-provide="datepicker">
+                                <input type="text" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button onclick="adicionaExemplo();" type="button" class="btn btn-success">Adicionar</button>
+                        <button onclick="escondeModalExemplo();" type="button"
+                            class="btn btn-secundary">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div th:insert="~{components/footer :: footer}"></div>
+    </div>
+
+    <script src="../plugins/jquery/jquery.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="../plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="../plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="../dist/js/adminlte.min.js"></script>
+    <script src="../plugins/select2/js/select2.full.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+    <script th:inline="javascript">
+
+        $(document).ready(() => {
+            $('.select2').select2()
+
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+
+        });
+
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'dd/MM/yyyy',
+                todayHighlight: true,
+                autoclose: true
+            });
+        });
+        // $('.datepicker').datepicker();
+
+        function limpaExemploModal() {
+            document.getElementById("exemploobs").value = "";
+        }
+
+        function mostraModalExemplo() {
+            $("#modal-adiciona-exemplo").modal("show");
+        }
+
+        function escondeModalExemplo() {
+            limpaExemploModal();
+            $("#modal-adiciona-exemplo").modal("hide");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let collapsedCards = document.querySelectorAll('.collapsed-card');
+            collapsedCards.forEach(function (card) {
+                let span = card.querySelector('span span');
+                if (span && span.textContent.trim().startsWith('/')) {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        function toggle() {
+            const body = document.body;
+            const sidebar = document.querySelector('.main-sidebar');
+            const navbar = document.querySelector('.main-header.navbar');
+            const icon = document.getElementById('icon');
+
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                sidebar.classList.remove('sidebar-dark-primary');
+                sidebar.classList.add('sidebar-light-primary');
+                navbar.classList.remove('navbar-dark');
+                navbar.classList.add('navbar-light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                body.classList.add('dark-mode');
+                sidebar.classList.remove('sidebar-light-primary');
+                sidebar.classList.add('sidebar-dark-primary');
+                navbar.classList.remove('navbar-light');
+                navbar.classList.add('navbar-dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        function redireciona(url) {
+            window.location.href = url;
+        }
+
+    </script>
+</body>
+
+</html>
