@@ -11,14 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.futebol.gestao_time.model.Pagamento;
-import com.futebol.gestao_time.repository.IPagamentoRepository;
+import com.futebol.gestao_time.repository.IPagamento;
 import com.futebol.gestao_time.utils.Resposta;
 
 @Service
 public class PagamentoService {
 
     @Autowired
-    private IPagamentoRepository repository;
+    private IPagamento repository;
 
     public Resposta buscarPagamentoPorIdUsuario(Integer id) {
         Resposta resposta = new Resposta();

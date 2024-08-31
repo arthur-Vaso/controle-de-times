@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "presenca")
+@Table(name = "presencas")
 public class Presenca {
 
     @Id
@@ -26,8 +26,8 @@ public class Presenca {
     private Date presenca;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
+    @JoinColumn(name = "id_usuario_complemento")
+    private UsuarioComplemento usuario;
 
     @Column(name = "mes")
     private Integer mes;

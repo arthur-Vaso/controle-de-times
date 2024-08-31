@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.futebol.gestao_time.model.Usuario;
-import com.futebol.gestao_time.repository.IUsuarioRepository;
+import com.futebol.gestao_time.model.UsuarioComplemento;
+import com.futebol.gestao_time.repository.IUsuarioComplemento;
 import com.futebol.gestao_time.service.PagamentoService;
 import com.futebol.gestao_time.service.PresencaService;
 import com.futebol.gestao_time.service.UsuarioService;
@@ -25,7 +25,7 @@ import com.futebol.gestao_time.utils.Resposta;
 public class TUsuarioController {
 
     @Autowired
-	private IUsuarioRepository usuarioRepository;
+	private IUsuarioComplemento usuarioRepository;
 	@Autowired
 	private UsuarioService usuarioService;
 	@Autowired
@@ -35,7 +35,7 @@ public class TUsuarioController {
 
     @GetMapping("/visualizar")
     public String carregaJogador(Model model, @RequestParam(required = false) Integer id) {
-		Optional<Usuario> usuario = usuarioRepository.findById(id);
+		Optional<UsuarioComplemento> usuario = usuarioRepository.findById(id);
 		Map<String, Object> respostaPagamento = pagamentoService.buscarPagamentoPorIdUsuario(id).getBody();
 		Map<String, Object> respostaPresenca = presencaService.bucarPresencaPorIdUsuario(id).getBody();
 
