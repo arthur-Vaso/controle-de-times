@@ -9,7 +9,9 @@
 
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="../dist/css/adminlte.min.css">
@@ -17,13 +19,119 @@
     <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link rel="stylesheet" href="../plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="../plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 
     <style>
         .card {
             padding-left: 1rem;
             padding-right: 1rem;
+        }
+
+        .page-link .page-month {
+            width: auto;
+            text-wrap: nowrap;
+            text-align: center;
+            font-weight: bold;
+            padding: 0%;
+        }
+
+
+        .pagination-month .page-item .page-month .page-link {
+            font-size: medium;
+        }
+
+        .text-vertical {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .text-vertical {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .page-link p {
+                align-items: center;
+                padding-top: .5vh;
+                padding-bottom: .5vh;
+                margin: 0;
+            }
+
+            .page-link .page-month {
+                padding-top: 1.6vh;
+                padding-bottom: 1.6vh;
+            }
+
+            .text-vertical p {
+                font-size: 1.125rem;
+            }
+        }
+
+        @media (min-width: 576px) and (max-width: 767px) {
+            .text-vertical {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+
+            .page-link p {
+                align-items: center;
+                padding-top: .6vh;
+                padding-bottom: .6vh;
+                margin: 0;
+            }
+
+            .text-vertical p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (min-width: 401px) and (max-width: 575px) {
+            .text-vertical {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 3vh;
+                padding-bottom: 3vh;
+            }
+
+            .page-link p {
+                align-items: center;
+                padding-top: .75vh;
+                padding-bottom: .75vh;
+                margin: 0;
+            }
+
+            .text-vertical p {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .text-vertical {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 4.7vh;
+                padding-bottom: 4.7vh;
+            }
+
+            .page-link p {
+                align-items: center;
+                padding-top: 0.5vh;
+                padding-bottom: 0.5vh;
+                margin: 0;
+            }
+
+            .text-vertical p {
+                font-size: 0.75rem;
+            }
         }
     </style>
 
@@ -50,30 +158,97 @@
                     </div>
                 </div>
             </section>
-            <section class="content">
-                <!-- Presença -->
-                <div class="card">
-                    <div class="card-header border-transparent">
-                        <h3 class="card-title" th:text="Presença"></h3>
-                        <div class="card-tools">
-                        </div>
-                    </div>
 
-                    <div class="card" th:each="nome : ${nomes}">
-                        <div class="card-header border-transparent d-flex justify-content-between align-items-center">
-                            <h3 class="card-title" th:text="${nome}"></h3>
-                            <div >
-                                <button class="btn btn-success btn-secundary ml-auto"
-                                    onclick="mostraModalExemplo();">Ver
-                                    Presença</button>
-                                <button class="btn btn-success btn-secundary ml-auto"
-                                    onclick="mostraModalExemplo();">Ver
-                                    Pagamento</button>
+            <section class="content">
+                <div class="card">
+                    <div class="card-body p-0 pb-2">
+                        <div class="row d-flex align-items-center">
+                            <div class="col-12 p-3 m-0 text-center ano-header">
+                                <h3 id="ano-atual" style="margin: 0;" th:text="${ano}"></h3>
+                            </div>
+
+                            <div id="divmaismenos" class="col-1 flex-wrap p-0  page-item">
+                                <a id="volta-ano" class="page-link text-vertical" href="#">
+                                    <p>2</p>
+                                    <p>0</p>
+                                    <p>2</p>
+                                    <p>3</p>
+                                </a>
+                            </div>
+
+                            <div class="col col-10 d-flex flex-wrap justify-content-center p-0">
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(1)" href="#">
+                                        <p class="page-month">Janeiro</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(2)" href="#">
+                                        <p class="page-month">Fevereiro</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(3)" href="#">
+                                        <p class="page-month">Março</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(4)" href="#">
+                                        <p class="page-month">Abril</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(5)" href="#">
+                                        <p class="page-month">Maio</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(6)" href="#">
+                                        <p class="page-month">Junho</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(7)" href="#">
+                                        <p class="page-month">Julho</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(8)" href="#">
+                                        <p class="page-month">Agosto</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(9)" href="#">
+                                        <p class="page-month">Setembro</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(10)" href="#">
+                                        <p class="page-month">Outubro</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(11)" href="#">
+                                        <p class="page-month">Novembro</p>
+                                    </a>
+                                </div>
+                                <div class="col-4 col-sm-3 col-md-2 p-0 page-item">
+                                    <a class="page-link" onclick="buscarPresenca(12)" href="#">
+                                        <p class="page-month">Dezembro</p>
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="divmenosano" class="col-1 p-0 page-item">
+                                <a id="avanca-ano" class="page-link text-vertical" href="#">
+                                    <p>2</p>
+                                    <p>0</p>
+                                    <p>2</p>
+                                    <p>5</p>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <div class="container-fluid">
                     <div class="row">
@@ -82,20 +257,29 @@
                                 <table id="tabela-presenca" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>ID</th>
-                                            <th>ID</th>
-                                            <th>ID</th>
-                                            <th>ID</th>
+                                            <th class="d-none">nome</th>
+                                            <th class="d-none">corpo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="presenca : ${presencas}">
-                                            <td><span th:text="${presenca.id}"></span></td>
-                                            <td><span th:text="${presenca.usuario.nome}"></span></td>
-                                            <td><span th:text="${presenca.ano}"></span></td>
-                                            <td><span th:text="${presenca.mes}"></span></td>
-                                            <td><span th:text="${presenca.id}"></span></td>
+                                        <tr th:each="usuario : ${nomes}">
+                                            <td class="d-none"><span
+                                                    th:text="${usuario.nome + ' ' + usuario.sobrenome}"></span></td>
+                                            <td class="p-0">
+                                                <div class="card d-flex w-100 m-0">
+                                                    <div class="row justify-content-between align-items-center">
+                                                        <div class="col-8">
+                                                            <span
+                                                                th:text="${usuario.nome + ' ' + usuario.sobrenome}"></span>
+                                                        </div>
+                                                        <div class="col-4 d-flex justify-content-end">
+                                                            <button class="btn bg-gradient-info"
+                                                                style="margin-right: 2%;"
+                                                                th:onclick="'window.location.href=\'/presenca/visualizar?id=' + ${usuario.id} + '\';'">Ver</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -127,6 +311,17 @@
     <script src="../plugins/select2/js/select2.full.min.js"></script>
 
     <script th:inline="javascript">
+        let anos = /*[[${anoslista}]]*/[];
+        let ano = /*[[${ano}]]*/[];
+        let primeiroAno;
+        let ultimoAno;
+
+        if (anos != null) {
+            primeiroAno = anos[0];
+            if (anos.length > 0) {
+                ultimoAno = anos[anos.length - 1];
+            }
+        }
 
         $(document).ready(() => {
             $('.select2').select2()
@@ -134,6 +329,8 @@
             $('.select2bs4').select2({
                 theme: 'bootstrap4'
             })
+
+            mudaDatas(ano);
         });
 
         function toggle() {
@@ -165,18 +362,156 @@
             window.location.href = url;
         }
 
+        async function buscarPresenca(mes) {
+            let ano = document.getElementById('ano-atual').value;
+            redireciona(`/presenca/listar?ano=${ano}&mes=${mes}`)
+        }
+
+        document.getElementById('volta-ano').addEventListener('click', function (event) {
+            event.preventDefault();
+            mudaDatas(this.value);
+        });
+
+        document.getElementById('avanca-ano').addEventListener('click', function (event) {
+            event.preventDefault();
+            mudaDatas(this.value);
+        });
+
+
+        function mudaDatas(data) {
+            data = parseInt(data);
+            let anoAtual = document.getElementById('ano-atual');
+            anoAtual.textContent = "";
+            anoAtual.textContent = data;
+            anoAtual.value = data;
+            let voltaAno = document.getElementById('volta-ano');
+            let anoVolta = data - 1;
+            let avancaAno = document.getElementById('avanca-ano');
+            let anoAvanca = data + 1;
+
+            if (data == primeiroAno) {
+                voltaAno.value = anoVolta;
+                voltaAno.style.pointerEvents = 'none';
+
+                while (voltaAno.firstChild) {
+                    voltaAno.removeChild(voltaAno.firstChild);
+                }
+
+                anoVolta.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    voltaAno.appendChild(p);
+                });
+
+                avancaAno.value = anoAvanca;
+                if (avancaAno.value > ultimoAno) {
+                    avancaAno.style.pointerEvents = 'none';
+                } else {
+                    avancaAno.style.pointerEvents = 'auto';
+                }
+
+                while (avancaAno.firstChild) {
+                    avancaAno.removeChild(avancaAno.firstChild);
+                }
+
+                anoAvanca.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    avancaAno.appendChild(p);
+                });
+            } else if (data == ultimoAno) {
+                voltaAno.value = anoVolta;
+                if (voltaAno.value < primeiroAno) {
+                    voltaAno.style.pointerEvents = 'none';
+                } else {
+                    voltaAno.style.pointerEvents = 'auto';
+                }
+
+                while (voltaAno.firstChild) {
+                    voltaAno.removeChild(voltaAno.firstChild);
+                }
+
+                anoVolta.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    voltaAno.appendChild(p);
+                });
+
+                avancaAno.value = anoAvanca;
+                avancaAno.style.pointerEvents = 'none';
+
+                while (avancaAno.firstChild) {
+                    avancaAno.removeChild(avancaAno.firstChild);
+                }
+
+                anoAvanca.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    avancaAno.appendChild(p);
+                });
+            } else {
+                voltaAno.value = anoVolta;
+                voltaAno.style.pointerEvents = 'auto';
+
+                while (voltaAno.firstChild) {
+                    voltaAno.removeChild(voltaAno.firstChild);
+                }
+
+                anoVolta.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    voltaAno.appendChild(p);
+                });
+
+                avancaAno.value = anoAvanca;
+                avancaAno.style.pointerEvents = 'auto';
+
+                while (avancaAno.firstChild) {
+                    avancaAno.removeChild(avancaAno.firstChild);
+                }
+
+                anoAvanca.toString().split('').forEach(char => {
+                    let p = document.createElement('p');
+                    p.textContent = char;
+                    avancaAno.appendChild(p);
+                });
+            }
+        }
     </script>
     <script th:inline="none">
         $("#tabela-presenca").DataTable({
+            "language": {
+                "decimal": "",
+                "emptyTable": "Nenhum dado disponível",
+                "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                "infoPostFix": "",
+                "thousands": ".",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "Pesquisar:",
+                "zeroRecords": "Nenhum registro correspondente encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": ativar para ordenar a coluna de forma ascendente",
+                    "sortDescending": ": ativar para ordenar a coluna de forma descendente"
+                }
+            },
             "responsive": true,
             "lengthChange": true,
             "autoWidth": false,
             "paging": true,
             "searching": true,
             "ordering": true,
-            "order": [1, 'asc'],
+            "order": [0, 'asc'],
             "info": true,
-            "buttons": ["excel", "pdf", "print", "colvis"],
             "pageLength": 10,
             "lengthMenu": [[10, 25, 50, 100, -1], [10, 20, 50, 100, "Todos"]],
         }).buttons().container().appendTo('#tabela-presenca_wrapper .col-md-6:eq(0)');

@@ -23,16 +23,21 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 
     <style>
+
         .card {
             padding-left: 1rem;
             padding-right: 1rem;
         }
 
-        .datepicker table tr td span.focused, .datepicker table tr td span:hover {
+        .datepicker table tr td span.focused,
+        .datepicker table tr td span:hover {
             background: #74727286;
         }
 
-        .datepicker .datepicker-switch:hover, .datepicker .next:hover, .datepicker .prev:hover, .datepicker tfoot tr th:hover {
+        .datepicker .datepicker-switch:hover,
+        .datepicker .next:hover,
+        .datepicker .prev:hover,
+        .datepicker tfoot tr th:hover {
             background: #74727286;
         }
 
@@ -41,11 +46,6 @@
             background: #74727286;
             cursor: pointer;
         }
-        /* 
-        .dark-mode .dropdown-menu {
-            background-color: #343a40;
-            color: #414141;
-        } */
     </style>
 
 </head>
@@ -81,16 +81,27 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-header border-transparent d-flex justify-content-between align-items-center">
-                            <h3 class="card-title badge badge-secondary"
-                                th:text="${usuario.nome} + ' ' + ${usuario.sobrenome}"></h3>
-                            <button class="btn btn-success btn-tool ml-auto" onclick="mostraModalExemplo();">Nova
-                                Presença</button>
+                        <div class="card-header border-transparent align-items-center">
+                            <div class="row">
+                                <div class="col col-md-6 col-sm-12 d-flex justify-content-start">
+                                    <h3 class="card-title badge badge-gradient-secondary m-1"
+                                        th:text="${usuario.nome} + ' ' + ${usuario.sobrenome}"></h3>
+                                </div>
+                                <div class="col col-md-6 col-sm-12 d-flex justify-content-end">
+                                    <button class="btn bg-gradient-success m-1 text-nowrap"
+                                        onclick="mostraModalPresenca();">Nova
+                                        Presença</button>
+                                    <button class="btn bg-gradient-info m-1" onclick="mostraModalMotivo(true);"
+                                        th:if="${usuario.ativo == false}">Ativar</button>
+                                    <button class="btn bg-gradient-danger m-1" onclick="mostraModalMotivo(false);"
+                                        th:if="${usuario.ativo == true}">Inativar</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-body">
-                            <div class="card collapsed-card bg bg-olive" th:each="ano : ${anos}">
-                                <div class="card-header border-transparent bg bg-olive">
-                                    <h3 class="card-title">
+                            <div class="card collapsed-card p-0" th:each="ano : ${anos}">
+                                <div class="card-header border-transparent bg bg-gradient-success">
+                                    <h3 class="card-title text-dark">
                                         <span th:each="listaAno : ${listaAnos}" th:if="${ano == listaAno.ano}">
                                             <span th:text="${ano} + ' Presente em ' + ${listaAno.conta}"></span>
                                         </span>
@@ -100,7 +111,8 @@
                                         </span>
                                     </h3>
                                     <div class="card-tools">
-                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <button type="button" class="btn btn-tool text-dark"
+                                            data-card-widget="collapse">
                                             <i class="fas fa-plus"></i>
                                         </button>
                                     </div>
@@ -132,15 +144,16 @@
                                             <div class="card-body">
                                                 <div class="row p-3">
                                                     <div class="col-12">
-                                                        <table id="tabela-presenca"
-                                                            class="table table-bordered table-striped">
+                                                        <table
+                                                            th:id="'tabela-presenca-' + ${ano} + '-' + ${mes.getNumero()}"
+                                                            class="table table-bordered table-striped table-hover">
                                                             <Thead>
                                                                 <tr>
                                                                     <th class="text-dark" style="width: 5%;">Data </th>
                                                                     <th class="text-dark">Observação</th>
                                                                 </tr>
                                                             </Thead>
-                                                            <tbody>
+                                                            <tbody class="table-group-divider">
                                                                 <tr th:each="presenca : ${presencas}">
                                                                     <td class="text-dark"
                                                                         th:if="${presenca.ano == ano && presenca.mes == mes.getNumero()}"
@@ -166,42 +179,68 @@
             </section>
         </div>
 
-        <div class="modal fade" id="modal-adiciona-exemplo" tabindex="-1" role="dialog" data-backdrop="static"
+        <!-- MODAL NOVA PRESENÇA -->
+        <div class="modal fade" id="modal-nova-presenca" tabindex="-1" role="dialog" data-backdrop="static"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-md">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Adicione um exemplo</h4>
+                    <div class="modal-header bg-gradient-success">
+                        <h4 class="modal-title text-dark" style="font-weight: bolder;">Nova Presença</h4>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group">
-                                    <label for="exemploobs">Observações</label>
-                                    <textarea maxlength="255" id="exemploobs" name="exemploobs"
-                                        class="form-control"></textarea>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text fas fa-calendar" id="basic-addon1"></span>
+                                    <input type="text" class="form-control datepicker text-dark" id="date"
+                                        style="padding-left: 2%;" readonly>
                                 </div>
                             </div>
-                            <label for="date">Escolha uma data</label>
-                            <input type="text" class="form-control datepicker text-dark" id="date"
-                                placeholder="Clique para selecionar uma data">
-                            <!-- <div class="input-group date" data-provide="datepicker">
-                                <input type="text" class="form-control">
-                                <div class="input-group-addon">
-                                    <span class="glyphicon glyphicon-th"></span>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="observacao">Observações</label>
+                                    <textarea maxlength="255" id="observacao" name="observacao"
+                                        class="form-control text-dark"></textarea>
                                 </div>
-                            </div> -->
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
-                        <button onclick="adicionaExemplo();" type="button" class="btn btn-success">Adicionar</button>
-                        <button onclick="escondeModalExemplo();" type="button"
-                            class="btn btn-secundary">Cancelar</button>
+                        <button onclick="salvarPresenca();" type="button" class="btn btn-success">Salvar</button>
+                        <button onclick="escondeModalPresenca();" type="button"
+                            class="btn btn-outline-dark">Cancelar</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- MODAL ATIVA/INATIVA -->
+        <div class="modal fade" id="modal-motivo" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-success">
+                        <h4 class="modal-title text-dark" style="font-weight: bolder;">Nova Presença</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="txtmotivo">Justificativa</label>
+                                    <textarea maxlength="255" id="txtmotivo" name="txtmotivo"
+                                        class="form-control text-dark"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button onclick="salvarMotivo();" type="button" class="btn btn-success"
+                            id="botao-motivo"></button>
+                        <button onclick="escondeModalMotivo();" type="button"
+                            class="btn btn-outline-dark">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div th:insert="~{components/footer :: footer}"></div>
     </div>
@@ -224,8 +263,14 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
+    <script src="../plugins/inputmask/jquery.inputmask.min.js"></script>
+
 
     <script th:inline="javascript">
+        let usuario = /*[[${usuario}]]*/[];
+        let anos = /*[[${anos}]]*/[];
+        let meses = /*[[${enummeses}]]*/[];
+        let data = new Date();
 
         $(document).ready(() => {
             $('.select2').select2()
@@ -234,28 +279,219 @@
                 theme: 'bootstrap4'
             })
 
+            document.getElementById("date").value = formatDate(data, true);
+
+            $('#date').inputmask({
+                alias: 'datetime',
+                inputFormat: 'dd/mm/yyyy',
+                leapday: "29/02/",
+                placeholder: '  /  /    '
+            });
         });
 
         $(document).ready(function () {
             $('.datepicker').datepicker({
-                format: 'dd/MM/yyyy',
+                format: 'dd/mm/yyyy',
                 todayHighlight: true,
                 autoclose: true
             });
         });
-        // $('.datepicker').datepicker();
 
-        function limpaExemploModal() {
-            document.getElementById("exemploobs").value = "";
+        // $(document).ready(function () {
+        //     for (let ano of anos) {
+        //         for (let mes of meses) {
+        //             $("#tabela-presenca-"+ano+"-"+mes).each(function () {
+        //                 $(this).DataTable({
+        //                     "responsive": false,
+        //                     "lengthChange": false,
+        //                     "autoWidth": false,
+        //                     "paging": false,
+        //                     "searching": false,
+        //                     "ordering": true,
+        //                     "info": true,
+        //                     "buttons": ["excel", "pdf", "print", "colvis"],
+        //                     "order": [0, 'asc']
+        //                 }).buttons().container().appendTo('#tabela-presenca-'+ano+'-'+mes+'_wrapper .col-md-6:eq(0)');
+        //             })
+        //         }
+        //     }
+        // });
+
+        async function salvarPresenca() {
+            const presenca = {
+                presenca: formatDate(document.getElementById("date").value, false),
+                observacao: document.getElementById("observacao").value
+            };
+
+            try {
+                escondeModalPresenca();
+                const response = await fetch('/presenca/salvar-presenca/?id=' + usuario.id + '&idUsuario=' + 7, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(presenca)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok, rigth?');
+                }
+
+                const result = await response.json();
+
+                $(document).Toasts('create', {
+                    class: 'bg-success',
+                    title: 'Presença',
+                    subtitle: 'sucesso',
+                    body: 'Presença salva com sucesso.',
+                    autohide: true,
+                    delay: 3000,
+                })
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            } catch (error) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Presença',
+                    subtitle: 'erro',
+                    body: 'Não foi possível salvar a presença.',
+                    autohide: true,
+                    delay: 10000,
+                })
+                console.error('Erro ao enviar dados:', error);
+            }
         }
 
-        function mostraModalExemplo() {
-            $("#modal-adiciona-exemplo").modal("show");
+        function formatDate(date, formato) {
+            let day;
+            let month;
+            let year;
+
+            if (formato) {
+                day = String(date.getDate()).padStart(2, '0');
+                month = String(date.getMonth() + 1).padStart(2, '0');
+                year = date.getFullYear();
+
+                return day + '/' + month + '/' + year;
+            } else {
+                let split = date.split('/')
+
+                day = split[0];
+                month = split[1];
+                year = split[2];
+
+                return year + '-' + month + '-' + day;
+            }
+
         }
 
-        function escondeModalExemplo() {
-            limpaExemploModal();
-            $("#modal-adiciona-exemplo").modal("hide");
+        async function salvarMotivo() {
+            let txtBotao = document.getElementById('botao-motivo').value;
+
+            const log = {
+                "justificativa": document.getElementById("txtmotivo").value,
+                "pessoa": usuario.id,
+                "usuario": 7, //pegar o id da session
+                "status": txtBotao == 'Ativar' ? true : false
+            };
+
+            if (document.getElementById("txtmotivo").value == "") {
+                $(document).Toasts('create', {
+                    class: 'bg-warning',
+                    title: 'Presença',
+                    subtitle: 'alerta',
+                    body: 'Justifique a ação de ' + txtBotao + '.',
+                    autohide: true,
+                    delay: 5000,
+                })
+                return;
+            }
+
+            try {
+                escondeModalMotivo();
+                const response = await fetch('/usuario/atualiza-atatus', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(log)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const result = await response.json();
+
+                setTimeout(() => {
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Presença',
+                        subtitle: 'sucesso',
+                        body: txtBotao + ' realizado com sucesso.',
+                        autohide: true,
+                        delay: 3000
+                    })
+
+                    window.location.reload();
+                }, 1000);
+            } catch (error) {
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Presença',
+                    subtitle: 'erro',
+                    body: 'Não foi possível  ' + txtBotao + '.',
+                    autohide: true,
+                    delay: 10000,
+                })
+                console.error('Erro ao enviar dados:', error);
+            }
+        }
+
+        function limpaModalPresenca() {
+            document.getElementById("date").value = formatDate(data, true);
+            document.getElementById("observacao").value = "";
+        }
+
+        function limpaModalMotivo() {
+            document.getElementById("txtmotivo").value = "";
+        }
+
+        function mostraModalPresenca() {
+            $("#modal-nova-presenca").modal("show");
+            setTimeout(() => {
+                document.getElementById("observacao").focus();
+            }, 500);
+        }
+
+        function escondeModalPresenca() {
+            limpaModalPresenca();
+            $("#modal-nova-presenca").modal("hide");
+        }
+
+        function mostraModalMotivo(motivo) {
+            let btn = document.getElementById("botao-motivo")
+            if (motivo) {
+                btn.value = 'Ativar'
+                btn.textContent = 'Ativar'
+                btn.classList.remove('btn-danger')
+                btn.classList.add('btn-success')
+            } else {
+                btn.value = 'Inativar'
+                btn.textContent = 'Inativar'
+                btn.classList.remove('btn-success')
+                btn.classList.add('btn-danger')
+            }
+            $("#modal-motivo").modal("show");
+            setTimeout(() => {
+                document.getElementById("txtmotivo").focus()
+            }, 500);
+        }
+
+        function escondeModalMotivo() {
+            limpaModalMotivo();
+            $("#modal-motivo").modal("hide");
         }
 
         document.addEventListener("DOMContentLoaded", function () {
