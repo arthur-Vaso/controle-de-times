@@ -22,8 +22,8 @@ import com.futebol.gestao_time.repository.IUsuarioComplemento;
 import com.futebol.gestao_time.utils.Mes;
 import com.futebol.gestao_time.utils.Resposta;
 import com.futebol.gestao_time.view.ContagemMesAno;
-import com.futebol.gestao_time.view.PresencaContaAnoMesView;
-import com.futebol.gestao_time.view.PresencaContaAnoView;
+import com.futebol.gestao_time.view.ContaAnoMesView;
+import com.futebol.gestao_time.view.ContaAnoView;
 
 import jakarta.persistence.Tuple;
 
@@ -132,9 +132,9 @@ public class PresencaService {
         return anos;
     }
 
-    public List<PresencaContaAnoMesView> listarAnosEMeses(Integer id) {
+    public List<ContaAnoMesView> listarAnosEMeses(Integer id) {
         List<Tuple> contaAnosMeses = repository.countByIdUsuarioAndAnoAndMes(id);
-        List<PresencaContaAnoMesView> listaAnosMeses = new ArrayList<>();
+        List<ContaAnoMesView> listaAnosMeses = new ArrayList<>();
 
         for (Tuple tuple : contaAnosMeses) {
             UsuarioComplemento usuarioView = (UsuarioComplemento) tuple.get("usuario");
@@ -142,23 +142,23 @@ public class PresencaService {
             String ano = (String) tuple.get("ano");
             Integer conta = ((Long) tuple.get("conta")).intValue();
 
-            PresencaContaAnoMesView view = new PresencaContaAnoMesView(usuarioView, mes, ano, conta);
+            ContaAnoMesView view = new ContaAnoMesView(usuarioView, mes, ano, conta);
             listaAnosMeses.add(view);
         }
 
         return listaAnosMeses;
     }
 
-    public List<PresencaContaAnoView> listarAnos(Integer id) {
+    public List<ContaAnoView> listarAnos(Integer id) {
         List<Tuple> contaAnos = repository.countByIdUsuarioAndAno(id);
-        List<PresencaContaAnoView> listaAnos = new ArrayList<>();
+        List<ContaAnoView> listaAnos = new ArrayList<>();
 
         for (Tuple tuple : contaAnos) {
             UsuarioComplemento usuarioView = (UsuarioComplemento) tuple.get("usuario");
             String ano = (String) tuple.get("ano");
             Integer conta = ((Long) tuple.get("conta")).intValue();
 
-            PresencaContaAnoView view = new PresencaContaAnoView(usuarioView, ano, conta);
+            ContaAnoView view = new ContaAnoView(usuarioView, ano, conta);
             listaAnos.add(view);
         }
 

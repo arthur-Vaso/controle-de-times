@@ -297,26 +297,6 @@
             });
         });
 
-        // $(document).ready(function () {
-        //     for (let ano of anos) {
-        //         for (let mes of meses) {
-        //             $("#tabela-presenca-"+ano+"-"+mes).each(function () {
-        //                 $(this).DataTable({
-        //                     "responsive": false,
-        //                     "lengthChange": false,
-        //                     "autoWidth": false,
-        //                     "paging": false,
-        //                     "searching": false,
-        //                     "ordering": true,
-        //                     "info": true,
-        //                     "buttons": ["excel", "pdf", "print", "colvis"],
-        //                     "order": [0, 'asc']
-        //                 }).buttons().container().appendTo('#tabela-presenca-'+ano+'-'+mes+'_wrapper .col-md-6:eq(0)');
-        //             })
-        //         }
-        //     }
-        // });
-
         async function salvarPresenca() {
             const presenca = {
                 presenca: formatDate(document.getElementById("date").value, false),

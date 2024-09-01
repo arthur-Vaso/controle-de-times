@@ -161,10 +161,11 @@
 
             <section class="content">
                 <div class="card">
-                    <div class="card-body p-0 pb-2">
+                    <div class="card-body p-0 pb-2 mb-3">
                         <div class="row d-flex align-items-center">
                             <div class="col-12 p-3 m-0 text-center ano-header">
                                 <h3 id="ano-atual" style="margin: 0;" th:text="${ano}"></h3>
+                                <h5 id="mes-atual" style="margin: 0;"></h5>
                             </div>
 
                             <div id="divmaismenos" class="col-1 flex-wrap p-0  page-item">
@@ -313,6 +314,7 @@
     <script th:inline="javascript">
         let anos = /*[[${anoslista}]]*/[];
         let ano = /*[[${ano}]]*/[];
+        let mes = /*[[${mes}]]*/[];
         let primeiroAno;
         let ultimoAno;
 
@@ -331,6 +333,7 @@
             })
 
             mudaDatas(ano);
+            mudaMes();
         });
 
         function toggle() {
@@ -377,6 +380,63 @@
             mudaDatas(this.value);
         });
 
+        function mudaMes() {
+            let mesAtual = document.getElementById('mes-atual');
+            let texto;
+
+            switch (mes) {
+                case 1: {
+                    texto = 'Janeiro';
+                    break;
+                }
+                case 2: {
+                    texto = 'Fevereiro';
+                    break;
+                }
+                case 3: {
+                    texto = 'Março';
+                    break;
+                }
+                case 4: {
+                    texto = 'Abril';
+                    break;
+                }
+                case 5: {
+                    texto = 'Maio';
+                    break;
+                }
+                case 6: {
+                    texto = 'Junho';
+                    break;
+                }
+                case 7: {
+                    texto = 'Julho';
+                    break;
+                }
+                case 8: {
+                    texto = 'Agosto';
+                    break;
+                }
+                case 9: {
+                    texto = 'Setembro';
+                    break;
+                }
+                case 10: {
+                    texto = 'Outubro';
+                    break;
+                }
+                case 11: {
+                    texto = 'Novembro';
+                    break;
+                }
+                case 12: {
+                    texto = 'Dezembro';
+                    break;
+                }
+            }
+
+            mesAtual.textContent = texto;
+        }
 
         function mudaDatas(data) {
             data = parseInt(data);

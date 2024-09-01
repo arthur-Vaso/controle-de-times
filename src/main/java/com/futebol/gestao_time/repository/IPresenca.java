@@ -12,7 +12,7 @@ import jakarta.persistence.Tuple;
 
 public interface IPresenca extends JpaRepository<Presenca, Integer> {
 
-        @Query(value = "SELECT * FROM presencas p WHERE p.id_usuario_complemento = :id ORDER BY p.ano DESC, p.mes ASC, p.id DESC", nativeQuery = true)
+        @Query(value = "SELECT * FROM presencas p WHERE p.id_usuario_complemento = :id ORDER BY p.ano DESC, p.data_presenca ASC", nativeQuery = true)
         List<Presenca> findByIdUsuarioOderByAnoDescMes(Integer id);
 
         @Query(value = "SELECT * FROM presencas p WHERE p.id_usuario_complemento = :id", nativeQuery = true)

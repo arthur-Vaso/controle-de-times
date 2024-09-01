@@ -52,6 +52,7 @@ public class TPresencaController {
 		model.addAttribute("nomes", nomes);
 		model.addAttribute("enummeses", Mes.values());
 		model.addAttribute("ano", ano);
+		model.addAttribute("mes", mes);
 
 		return "presenca/presencaListar";
 	}
@@ -70,6 +71,6 @@ public class TPresencaController {
 		model.addAttribute("listaContagemAnos", presencaService.contarAnos(anosSet));
 		model.addAttribute("listaContagemMeses", presencaService.contarMeses(anosSet));
 
-		return "presenca/presencaVizualizar";
+		return "presenca/presencaVisualizar";
 	}
 }
